@@ -1,2 +1,2 @@
 all:
-	./common_words.py --include corpora/paper*
+	./common_words.py --include include/* --exclude exclude/*

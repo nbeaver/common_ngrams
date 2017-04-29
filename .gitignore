@@ -1,5 +1,7 @@
 corpora/
 output/
+include/
+exclude/
 *.swp
 *.pyc
 __pycache__
