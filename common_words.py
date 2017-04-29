@@ -7,13 +7,14 @@ def wordset(filename):
         wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
     return set(wordlist_lower)
 
-setlist = []
-for filename in sys.argv[1:]:
-    setlist.append(wordset(filename))
+if __name__ == '__main__':
+    setlist = []
+    for filename in sys.argv[1:]:
+        setlist.append(wordset(filename))
 
-common_words = set(set.intersection(*setlist))
+    common_words = set(set.intersection(*setlist))
 
-for word in sorted(common_words):
-    sys.stdout.write(word + "\n")
+    for word in sorted(common_words):
+        sys.stdout.write(word + "\n")
 
-sys.stderr.write(str(len(common_words))+"\n")
+    sys.stderr.write(str(len(common_words))+"\n")
