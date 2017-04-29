@@ -1,3 +1,2 @@
 all:
-	./common-words.py corpora/paper*
-	./nltk-ngrams.py corpora/paper*
+	./common_words.py corpora/paper*
