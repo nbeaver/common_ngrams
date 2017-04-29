@@ -13,8 +13,8 @@ if __name__ == '__main__':
         '-i', '--include',
         type=argparse.FileType('r'),
         nargs='+',
-        help='Input files',
-        required=True
+        help='Include words from these files.',
+        required=True,
     )
     args = parser.parse_args()
     setlist = []
