@@ -1,16 +1,25 @@
 #! /usr/bin/env python
 import sys
+import argparse
 
-def wordset(filename):
-    with open(filename) as f:
-        wordlist = f.read().split()
-        wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
+def wordset(fp):
+    wordlist = fp.read().split()
+    wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
     return set(wordlist_lower)
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Find words in common for some text files.')
+    parser.add_argument(
+        '-i', '--include',
+        type=argparse.FileType('r'),
+        nargs='+',
+        help='Input files',
+        required=True
+    )
+    args = parser.parse_args()
     setlist = []
-    for filename in sys.argv[1:]:
-        setlist.append(wordset(filename))
+    for included_file in args.include:
+        setlist.append(wordset(included_file))
 
     common_words = set(set.intersection(*setlist))
 
