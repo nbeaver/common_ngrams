@@ -28,7 +28,7 @@ def words_in_common(included_fp, excluded_fp, tokenizer):
 def print_set(in_set):
     for item in sorted(in_set):
         print(str(item))
-    print(len(in_set))
+    sys.stderr.write('{}\n'.format(len(in_set)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Find words in common for some text files.')
