@@ -13,6 +13,10 @@ def bigram_set(fp):
     tokens = nltk.wordpunct_tokenize(fp.read())
     return set(nltk.ngrams(tokens, 2))
 
+def trigram_set(fp):
+    tokens = nltk.wordpunct_tokenize(fp.read())
+    return set(nltk.ngrams(tokens, 3))
+
 def ngrams_in_common(included_fp, excluded_fp, tokenizer):
     include_ngrams = []
     for included_fp in included_fp:
@@ -52,3 +56,6 @@ if __name__ == '__main__':
 
     display_bigrams = ngrams_in_common(args.include, args.exclude, bigram_set)
     print_set(display_bigrams)
+
+    display_trigrams = ngrams_in_common(args.include, args.exclude, trigram_set)
+    print_set(display_trigrams)
