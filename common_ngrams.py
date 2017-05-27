@@ -4,7 +4,7 @@ import sys
 import argparse
 import nltk
 
-def ngrams_in_common(includes, excludes, n=1):
+def ngrams_in_common(includes, excludes, n=1, nmax=10):
 
     def tokenize(text):
         tokens = nltk.wordpunct_tokenize(text)
@@ -18,8 +18,10 @@ def ngrams_in_common(includes, excludes, n=1):
     common_ngrams = set(set.intersection(*include_ngrams))
     for exclude_ngram_set in exclude_ngrams:
         common_ngrams = common_ngrams - exclude_ngram_set
-    if len(common_ngrams) > 1:
-        return set.union(common_ngrams, ngrams_in_common(includes, excludes, n+1))
+
+    sys.stderr.write('{}\n'.format(len(common_ngrams)))
+    if len(common_ngrams) > 1 and n < nmax:
+        return set.union(common_ngrams, ngrams_in_common(includes, excludes, n=n+1))
     else:
         return common_ngrams
 
