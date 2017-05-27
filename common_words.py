@@ -4,15 +4,15 @@ import sys
 import argparse
 import nltk
 
-def word_set(fp):
+def unigram_set(fp):
     try:
-        wordlist = fp.read().split()
+        text = fp.read()
     except UnicodeDecodeError:
         sys.stderr.write("Filename: {}\n".format(fp.name))
         raise
     fp.seek(0)
-    wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
-    return set(wordlist_lower)
+    tokens = nltk.wordpunct_tokenize(text)
+    return set(nltk.ngrams(tokens, 1))
 
 def bigram_set(fp):
     try:
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     tokenizer_funcs = [
-        word_set,
+        unigram_set,
         bigram_set,
         trigram_set,
     ]
