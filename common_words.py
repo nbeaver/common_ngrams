@@ -4,43 +4,25 @@ import sys
 import argparse
 import nltk
 
-def unigram_set(fp):
-    try:
-        text = fp.read()
-    except UnicodeDecodeError:
-        sys.stderr.write("Filename: {}\n".format(fp.name))
-        raise
-    fp.seek(0)
+def unigram_set(text):
     tokens = nltk.wordpunct_tokenize(text)
     return set(nltk.ngrams(tokens, 1))
 
-def bigram_set(fp):
-    try:
-        text = fp.read()
-    except UnicodeDecodeError:
-        sys.stderr.write("Filename: {}\n".format(fp.name))
-        raise
-    fp.seek(0)
+def bigram_set(text):
     tokens = nltk.wordpunct_tokenize(text)
     return set(nltk.ngrams(tokens, 2))
 
-def trigram_set(fp):
-    try:
-        text = fp.read()
-    except UnicodeDecodeError:
-        sys.stderr.write("Filename: {}\n".format(fp.name))
-        raise
-    fp.seek(0)
-    tokens = nltk.wordpunct_tokenize(fp.read())
+def trigram_set(text):
+    tokens = nltk.wordpunct_tokenize(text)
     return set(nltk.ngrams(tokens, 3))
 
-def ngrams_in_common(included_fp, excluded_fp, tokenizer):
+def ngrams_in_common(include_list, exclude_list, tokenizer):
     include_ngrams = []
-    for included_fp in included_fp:
-        include_ngrams.append(tokenizer(included_fp))
+    for include in include_list:
+        include_ngrams.append(tokenizer(include))
     exclude_ngrams = []
-    for excluded_fp in excluded_fp:
-        exclude_ngrams.append(tokenizer(excluded_fp))
+    for exclude in exclude_list:
+        exclude_ngrams.append(tokenizer(exclude))
     common_ngrams = set(set.intersection(*include_ngrams))
     for exclude_ngram_set in exclude_ngrams:
         common_ngrams = common_ngrams - exclude_ngram_set
@@ -50,6 +32,17 @@ def print_set(in_set):
     for item in sorted(in_set):
         print(' '.join(item))
     sys.stderr.write('{} ------------------------\n'.format(len(in_set)))
+
+def get_texts(fp_list):
+    texts = []
+    for fp in fp_list:
+        try:
+            text = fp.read()
+        except UnicodeDecodeError:
+            sys.stderr.write("Filename: {}\n".format(fp.name))
+            raise
+        texts.append(text)
+    return texts
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Find words in common for some text files.')
@@ -67,6 +60,10 @@ if __name__ == '__main__':
         help='Exclude words from these files.',
     )
     args = parser.parse_args()
+
+    include_texts = get_texts(args.include)
+    exclude_texts = get_texts(args.exclude)
+
     tokenizer_funcs = [
         unigram_set,
         bigram_set,
@@ -74,4 +71,4 @@ if __name__ == '__main__':
     ]
 
     for tokenizer_func in tokenizer_funcs:
-        print_set(ngrams_in_common(args.include, args.exclude, tokenizer_func))
+        print_set(ngrams_in_common(include_texts, exclude_texts, tokenizer_func))
