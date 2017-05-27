@@ -4,34 +4,28 @@ import sys
 import argparse
 import nltk
 
-def unigram_set(text):
-    tokens = nltk.wordpunct_tokenize(text)
-    return set(nltk.ngrams(tokens, 1))
+def ngrams_in_common(includes, excludes, n=1):
 
-def bigram_set(text):
-    tokens = nltk.wordpunct_tokenize(text)
-    return set(nltk.ngrams(tokens, 2))
+    def tokenize(text):
+        tokens = nltk.wordpunct_tokenize(text)
+        return set(nltk.ngrams(tokens, n))
 
-def trigram_set(text):
-    tokens = nltk.wordpunct_tokenize(text)
-    return set(nltk.ngrams(tokens, 3))
+    def ngram_list(texts):
+        return [tokenize(text) for text in texts]
 
-def ngrams_in_common(include_list, exclude_list, tokenizer):
-    include_ngrams = []
-    for include in include_list:
-        include_ngrams.append(tokenizer(include))
-    exclude_ngrams = []
-    for exclude in exclude_list:
-        exclude_ngrams.append(tokenizer(exclude))
+    include_ngrams = ngram_list(includes)
+    exclude_ngrams = ngram_list(excludes)
     common_ngrams = set(set.intersection(*include_ngrams))
     for exclude_ngram_set in exclude_ngrams:
         common_ngrams = common_ngrams - exclude_ngram_set
-    return common_ngrams
+    if len(common_ngrams) > 1:
+        return set.union(common_ngrams, ngrams_in_common(includes, excludes, n+1))
+    else:
+        return common_ngrams
 
-def print_set(in_set):
+def print_set_of_tuples(in_set):
     for item in sorted(in_set):
         print(' '.join(item))
-    sys.stderr.write('{} ------------------------\n'.format(len(in_set)))
 
 def get_texts(fp_list):
     texts = []
@@ -64,11 +58,4 @@ if __name__ == '__main__':
     include_texts = get_texts(args.include)
     exclude_texts = get_texts(args.exclude)
 
-    tokenizer_funcs = [
-        unigram_set,
-        bigram_set,
-        trigram_set,
-    ]
-
-    for tokenizer_func in tokenizer_funcs:
-        print_set(ngrams_in_common(include_texts, exclude_texts, tokenizer_func))
+    print_set_of_tuples(ngrams_in_common(include_texts, exclude_texts))
