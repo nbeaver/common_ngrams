@@ -10,6 +10,7 @@ def word_set(fp):
     except UnicodeDecodeError:
         sys.stderr.write("Filename: {}\n".format(fp.name))
         raise
+    fp.seek(0)
     wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
     return set(wordlist_lower)
 
@@ -19,6 +20,7 @@ def bigram_set(fp):
     except UnicodeDecodeError:
         sys.stderr.write("Filename: {}\n".format(fp.name))
         raise
+    fp.seek(0)
     tokens = nltk.wordpunct_tokenize(text)
     return set(nltk.ngrams(tokens, 2))
 
@@ -28,6 +30,7 @@ def trigram_set(fp):
     except UnicodeDecodeError:
         sys.stderr.write("Filename: {}\n".format(fp.name))
         raise
+    fp.seek(0)
     tokens = nltk.wordpunct_tokenize(fp.read())
     return set(nltk.ngrams(tokens, 3))
 
