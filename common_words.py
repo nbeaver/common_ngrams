@@ -48,8 +48,8 @@ def ngrams_in_common(included_fp, excluded_fp, tokenizer):
 
 def print_set(in_set):
     for item in sorted(in_set):
-        print(str(item))
-    sys.stderr.write('{}\n'.format(len(in_set)))
+        print(' '.join(item))
+    sys.stderr.write('{} ------------------------\n'.format(len(in_set)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Find words in common for some text files.')
