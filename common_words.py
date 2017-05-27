@@ -4,7 +4,7 @@ import sys
 import argparse
 import nltk
 
-def wordset(fp):
+def word_set(fp):
     wordlist = fp.read().split()
     wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
     return set(wordlist_lower)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    display_words = words_in_common(args.include, args.exclude, wordset)
+    display_words = words_in_common(args.include, args.exclude, word_set)
     print_set(display_words)
 
     display_bigrams = words_in_common(args.include, args.exclude, bigram_set)
