@@ -2,10 +2,12 @@
 import sys
 import argparse
 
+
 def wordset(fp):
     wordlist = fp.read().split()
     wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
     return set(wordlist_lower)
+
 
 def words_in_common(included_fp, excluded_fp):
     include_words = []
@@ -18,6 +20,7 @@ def words_in_common(included_fp, excluded_fp):
     for exclude_wordset in exclude_words:
         common_words = common_words - exclude_wordset
     return common_words
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Find words in common for some text files.')
