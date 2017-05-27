@@ -13,17 +13,17 @@ def bigram_set(fp):
     tokens = nltk.wordpunct_tokenize(fp.read())
     return set(nltk.ngrams(tokens, 2))
 
-def words_in_common(included_fp, excluded_fp, tokenizer):
-    include_words = []
+def ngrams_in_common(included_fp, excluded_fp, tokenizer):
+    include_ngrams = []
     for included_fp in included_fp:
-        include_words.append(tokenizer(included_fp))
-    exclude_words = []
+        include_ngrams.append(tokenizer(included_fp))
+    exclude_ngrams = []
     for excluded_fp in excluded_fp:
-        exclude_words.append(tokenizer(excluded_fp))
-    common_words = set(set.intersection(*include_words))
-    for exclude_wordset in exclude_words:
-        common_words = common_words - exclude_wordset
-    return common_words
+        exclude_ngrams.append(tokenizer(excluded_fp))
+    common_ngrams = set(set.intersection(*include_ngrams))
+    for exclude_ngram_set in exclude_ngrams:
+        common_ngrams = common_ngrams - exclude_ngram_set
+    return common_ngrams
 
 def print_set(in_set):
     for item in sorted(in_set):
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    display_words = words_in_common(args.include, args.exclude, word_set)
+    display_words = ngrams_in_common(args.include, args.exclude, word_set)
     print_set(display_words)
 
-    display_bigrams = words_in_common(args.include, args.exclude, bigram_set)
+    display_bigrams = ngrams_in_common(args.include, args.exclude, bigram_set)
     print_set(display_bigrams)
