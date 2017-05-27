@@ -1,4 +1,4 @@
-.PHONY : all
+.PHONY : all pep8
 
 all:
 	./common_words.py --include include/* --exclude exclude/*
