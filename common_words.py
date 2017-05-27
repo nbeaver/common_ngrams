@@ -50,12 +50,11 @@ if __name__ == '__main__':
         help='Exclude words from these files.',
     )
     args = parser.parse_args()
+    tokenizer_funcs = [
+        word_set,
+        bigram_set,
+        trigram_set,
+    ]
 
-    display_words = ngrams_in_common(args.include, args.exclude, word_set)
-    print_set(display_words)
-
-    display_bigrams = ngrams_in_common(args.include, args.exclude, bigram_set)
-    print_set(display_bigrams)
-
-    display_trigrams = ngrams_in_common(args.include, args.exclude, trigram_set)
-    print_set(display_trigrams)
+    for tokenizer_func in tokenizer_funcs:
+        print_set(ngrams_in_common(args.include, args.exclude, tokenizer_func))
