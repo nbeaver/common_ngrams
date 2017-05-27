@@ -1,7 +1,7 @@
 .PHONY : all pep8
 
 all:
-	./common_words.py --include include/* --exclude exclude/*
+	./common_ngrams.py --include include/* --exclude exclude/*
 
 pep8:
-	pep8 common_words.py
+	pep8 common_ngrams.py
