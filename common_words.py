@@ -5,15 +5,29 @@ import argparse
 import nltk
 
 def word_set(fp):
-    wordlist = fp.read().split()
+    try:
+        wordlist = fp.read().split()
+    except UnicodeDecodeError:
+        sys.stderr.write("Filename: {}\n".format(fp.name))
+        raise
     wordlist_lower = [word.strip('.,"();"').lower() for word in wordlist]
     return set(wordlist_lower)
 
 def bigram_set(fp):
-    tokens = nltk.wordpunct_tokenize(fp.read())
+    try:
+        text = fp.read()
+    except UnicodeDecodeError:
+        sys.stderr.write("Filename: {}\n".format(fp.name))
+        raise
+    tokens = nltk.wordpunct_tokenize(text)
     return set(nltk.ngrams(tokens, 2))
 
 def trigram_set(fp):
+    try:
+        text = fp.read()
+    except UnicodeDecodeError:
+        sys.stderr.write("Filename: {}\n".format(fp.name))
+        raise
     tokens = nltk.wordpunct_tokenize(fp.read())
     return set(nltk.ngrams(tokens, 3))
 
