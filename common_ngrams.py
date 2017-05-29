@@ -41,19 +41,19 @@ def get_texts(fp_list):
     return texts
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Find words in common for some text files.')
+    parser = argparse.ArgumentParser(description='Find n-grams in common for text files.')
     parser.add_argument(
         '-i', '--include',
         type=argparse.FileType('r'),
         nargs='+',
-        help='Include words from these files.',
+        help='Include n-grams from these files.',
         required=True,
     )
     parser.add_argument(
         '-x', '--exclude',
         type=argparse.FileType('r'),
         nargs='*',
-        help='Exclude words from these files.',
+        help='Exclude n-grams from these files.',
     )
     args = parser.parse_args()
 
