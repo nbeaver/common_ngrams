@@ -4,6 +4,7 @@ import sys
 import argparse
 import nltk
 
+
 def ngrams_in_common(includes, excludes, n=1, nmax=10):
 
     def tokenize(text):
@@ -21,13 +22,17 @@ def ngrams_in_common(includes, excludes, n=1, nmax=10):
 
     sys.stderr.write('{}\n'.format(len(common_ngrams)))
     if len(common_ngrams) > 1 and n < nmax:
-        return set.union(common_ngrams, ngrams_in_common(includes, excludes, n=n+1))
+        return set.union(
+            common_ngrams,
+            ngrams_in_common(includes, excludes, n=n+1))
     else:
         return common_ngrams
+
 
 def print_set_of_tuples(in_set):
     for item in sorted(in_set):
         print(' '.join(item))
+
 
 def get_texts(fp_list):
     texts = []
