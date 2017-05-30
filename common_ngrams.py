@@ -36,6 +36,9 @@ def print_set_of_tuples(in_set):
 
 def get_texts(fp_list):
     texts = []
+    if fp_list == None:
+        return texts
+
     for fp in fp_list:
         try:
             text = fp.read()
