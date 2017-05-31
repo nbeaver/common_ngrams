@@ -78,10 +78,23 @@ if __name__ == '__main__':
         const=logging.INFO,
         default=logging.WARNING
     )
+    parser.add_argument(
+        '-s',
+        '--sort',
+        choices=['alpha', 'length'],
+        default='alpha',
+    )
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel)
 
     include_texts = get_texts(args.include)
     exclude_texts = get_texts(args.exclude)
 
-    print_tuples_longest_first(ngrams_include_exclude(include_texts, exclude_texts))
+    ngrams = ngrams_include_exclude(include_texts, exclude_texts)
+
+    if args.sort == 'alpha':
+        print_tuples_alphanumerically(ngrams)
+    elif args.sort == 'length':
+        print_tuples_longest_first(ngrams)
+    else:
+        raise NotImplementedError
