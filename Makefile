@@ -1,3 +1,4 @@
+PY = $(wildcard *.py)
 .PHONY : all pep8 test
 
 all:
@@ -7,4 +8,4 @@ test:
 	./test_common_ngrams.py
 
 pep8:
-	pep8 common_ngrams.py
+	pep8 $(PY)
