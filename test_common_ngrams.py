@@ -47,6 +47,14 @@ class ngrams_in_common(unittest.TestCase):
             overlap
         )
 
+class ngrams_include_exclude(unittest.TestCase):
+    def test_same(self):
+        example = "The quick brown fox jumps over the lazy dog."
+        self.assertEqual(
+            common_ngrams.ngrams_include_exclude([example], [example]),
+            set()
+        )
+
 
 class get_texts(unittest.TestCase):
     import tempfile
