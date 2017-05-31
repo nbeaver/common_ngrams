@@ -37,6 +37,17 @@ class ngrams_in_common(unittest.TestCase):
                 set()
             )
 
+    def test_single_overlap(self):
+        first = "The quick brown fox jumps"
+        second = "jumps over the lazy dog."
+        overlap = set()
+        overlap.add(("jumps",))
+        self.assertEqual(
+            common_ngrams.ngrams_in_common([first, second], 1),
+            overlap
+        )
+
+
 class get_texts(unittest.TestCase):
     import tempfile
     myfile1 = tempfile.NamedTemporaryFile()
