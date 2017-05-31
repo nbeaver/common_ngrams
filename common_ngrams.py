@@ -30,8 +30,12 @@ def ngrams_include_exclude(includes, excludes=[], n=1, nmax=10):
     else:
         return common_ngrams
 
-def print_set_of_tuples(in_set):
-    for item in sorted(in_set):
+def print_tuples_alphanumerically(iterable):
+    for item in sorted(iterable):
+        print(' '.join(item))
+
+def print_tuples_longest_first(iterable):
+    for item in sorted(iterable, key=lambda x: len(x), reverse=True):
         print(' '.join(item))
 
 
@@ -80,4 +84,4 @@ if __name__ == '__main__':
     include_texts = get_texts(args.include)
     exclude_texts = get_texts(args.exclude)
 
-    print_set_of_tuples(ngrams_include_exclude(include_texts, exclude_texts))
+    print_tuples_longest_first(ngrams_include_exclude(include_texts, exclude_texts))
