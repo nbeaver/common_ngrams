@@ -5,18 +5,20 @@ import nltk
 import logging
 
 
-def ngrams_in_common(includes, excludes=[], n=1, nmax=10):
+def ngram_set(text, n):
+    tokens = nltk.wordpunct_tokenize(text)
+    return set(nltk.ngrams(tokens, n))
 
-    def tokenize(text):
-        tokens = nltk.wordpunct_tokenize(text)
-        return set(nltk.ngrams(tokens, n))
 
-    def ngram_list(texts):
-        return [tokenize(text) for text in texts]
+def ngrams_in_common(texts, n):
+    ngram_sets = [ngram_set(text, n) for text in texts]
+    common_ngrams = set(set.intersection(*ngram_sets))
+    return common_ngrams
 
-    include_ngrams = ngram_list(includes)
-    exclude_ngrams = ngram_list(excludes)
-    common_ngrams = set(set.intersection(*include_ngrams))
+
+def ngrams_include_exclude(includes, excludes=[], n=1, nmax=10):
+    exclude_ngrams = [ngram_set(exclude, n) for exclude in excludes]
+    common_ngrams = ngrams_in_common(includes, n)
     for exclude_ngram_set in exclude_ngrams:
         common_ngrams = common_ngrams - exclude_ngram_set
 
@@ -24,10 +26,9 @@ def ngrams_in_common(includes, excludes=[], n=1, nmax=10):
     if len(common_ngrams) > 1 and n < nmax:
         return set.union(
             common_ngrams,
-            ngrams_in_common(includes, excludes, n=n+1))
+            ngrams_include_exclude(includes, excludes, n=n+1))
     else:
         return common_ngrams
-
 
 def print_set_of_tuples(in_set):
     for item in sorted(in_set):
@@ -79,4 +80,4 @@ if __name__ == '__main__':
     include_texts = get_texts(args.include)
     exclude_texts = get_texts(args.exclude)
 
-    print_set_of_tuples(ngrams_in_common(include_texts, exclude_texts))
+    print_set_of_tuples(ngrams_include_exclude(include_texts, exclude_texts))

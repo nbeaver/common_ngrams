@@ -8,15 +8,15 @@ class common_ngram_test(unittest.TestCase):
     def test_empty(self):
         example = "The quick brown fox jumps over the lazy dog."
         self.assertEqual(
-            common_ngrams.ngrams_in_common(['', '']),
+            common_ngrams.ngrams_in_common(['', ''], 1),
             set()
         )
         self.assertEqual(
-            common_ngrams.ngrams_in_common(['', example]),
+            common_ngrams.ngrams_in_common(['', example], 1),
             set()
         )
         self.assertEqual(
-            common_ngrams.ngrams_in_common([example, '']),
+            common_ngrams.ngrams_in_common([example, ''], 1),
             set()
         )
 
@@ -24,17 +24,18 @@ class common_ngram_test(unittest.TestCase):
         example = set()
         example.add(tuple('I'))
         self.assertEqual(
-            common_ngrams.ngrams_in_common(['I', 'I']),
+            common_ngrams.ngrams_in_common(['I', 'I'], 1),
             example
         )
 
     def test_disjoint(self):
         example = "The quick brown fox jumps over the lazy dog."
         disjoint = "Nothing from first sentence"
-        self.assertEqual(
-            common_ngrams.ngrams_in_common([example, disjoint]),
-            set()
-        )
+        for n in range(1, len(nltk.wordpunct_tokenize(example))+1):
+            self.assertEqual(
+                common_ngrams.ngrams_in_common([example, disjoint], n),
+                set()
+            )
 
 if __name__ == '__main__':
     unittest.main()
