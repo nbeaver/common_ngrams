@@ -3,7 +3,7 @@ import unittest
 import common_ngrams
 import nltk
 
-class common_ngram_test(unittest.TestCase):
+class ngrams_in_common(unittest.TestCase):
 
     def test_empty(self):
         example = "The quick brown fox jumps over the lazy dog."
@@ -37,7 +37,7 @@ class common_ngram_test(unittest.TestCase):
                 set()
             )
 
-class get_texts_test(unittest.TestCase):
+class get_texts(unittest.TestCase):
     import tempfile
     myfile1 = tempfile.NamedTemporaryFile()
     myfile1.file.write(bytes('test1', encoding='utf-8'))
