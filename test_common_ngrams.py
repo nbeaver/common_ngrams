@@ -55,6 +55,16 @@ class ngrams_include_exclude(unittest.TestCase):
             set()
         )
 
+    def test_almost_same(self):
+        example1 = "The quick brown fox jumps over the lazy dog."
+        example2 = "The quick brown fox jumps over the lazy dog"
+        difference = set()
+        difference.add(('.',))
+        self.assertEqual(
+            common_ngrams.ngrams_include_exclude([example1], [example2]),
+            difference
+        )
+
 
 class get_texts(unittest.TestCase):
     import tempfile
