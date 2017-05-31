@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 from __future__ import print_function
-import sys
 import argparse
 import nltk
+import logging
 
 
 def ngrams_in_common(includes, excludes, n=1, nmax=10):
@@ -20,7 +20,7 @@ def ngrams_in_common(includes, excludes, n=1, nmax=10):
     for exclude_ngram_set in exclude_ngrams:
         common_ngrams = common_ngrams - exclude_ngram_set
 
-    sys.stderr.write('{}\n'.format(len(common_ngrams)))
+    logging.info("{}-grams: {}".format(n, len(common_ngrams)))
     if len(common_ngrams) > 1 and n < nmax:
         return set.union(
             common_ngrams,
@@ -43,7 +43,7 @@ def get_texts(fp_list):
         try:
             text = fp.read()
         except UnicodeDecodeError:
-            sys.stderr.write("Filename: {}\n".format(fp.name))
+            logging.error("Filename: {}".format(fp.name))
             raise
         texts.append(text)
     return texts
@@ -65,7 +65,16 @@ if __name__ == '__main__':
         nargs='*',
         help='Exclude n-grams from these files.',
     )
+    parser.add_argument(
+        '-v',
+        '--verbose',
+        action='store_const',
+        dest='loglevel',
+        const=logging.INFO,
+        default=logging.WARNING
+    )
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel)
 
     include_texts = get_texts(args.include)
     exclude_texts = get_texts(args.exclude)
