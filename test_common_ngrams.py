@@ -65,6 +65,14 @@ class ngrams_include_exclude(unittest.TestCase):
             difference
         )
 
+    def test_exclude_superset(self):
+        example1 = "The quick brown fox jumps over the lazy dog"
+        example2 = "The quick brown fox jumps over the lazy dog."
+        self.assertEqual(
+            common_ngrams.ngrams_include_exclude([example1], [example2]),
+            set()
+        )
+
 
 class get_texts(unittest.TestCase):
     import tempfile
