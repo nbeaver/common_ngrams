@@ -5,7 +5,7 @@ import nltk
 import logging
 
 
-def ngrams_in_common(includes, excludes, n=1, nmax=10):
+def ngrams_in_common(includes, excludes=[], n=1, nmax=10):
 
     def tokenize(text):
         tokens = nltk.wordpunct_tokenize(text)
