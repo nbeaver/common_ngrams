@@ -75,15 +75,16 @@ class ngrams_include_exclude(unittest.TestCase):
 
 
 class get_texts(unittest.TestCase):
-    import tempfile
-    myfile1 = tempfile.NamedTemporaryFile()
-    myfile1.file.write(bytes('test1', encoding='utf-8'))
-    myfile1.file.seek(0)
-    myfile2 = tempfile.NamedTemporaryFile()
-    myfile2.file.write(bytes('test2', encoding='utf-8'))
-    myfile2.file.seek(0)
-    fp_list = [myfile1.file, myfile2.file]
-    common_ngrams.get_texts(fp_list)
+    def test_two_files(self):
+        import tempfile
+        myfile1 = tempfile.NamedTemporaryFile()
+        myfile1.file.write(bytes('test1', encoding='utf-8'))
+        myfile1.file.seek(0)
+        myfile2 = tempfile.NamedTemporaryFile()
+        myfile2.file.write(bytes('test2', encoding='utf-8'))
+        myfile2.file.seek(0)
+        fp_list = [myfile1.file, myfile2.file]
+        common_ngrams.get_texts(fp_list)
 
 if __name__ == '__main__':
     unittest.main()
