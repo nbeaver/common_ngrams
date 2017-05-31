@@ -49,7 +49,9 @@ def get_texts(fp_list):
     return texts
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Find n-grams in common for text files.')
+    parser = argparse.ArgumentParser(
+        description='Find n-grams in common for text files.')
+
     parser.add_argument(
         '-i', '--include',
         type=argparse.FileType('r'),
