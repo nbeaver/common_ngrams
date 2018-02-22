@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 from __future__ import print_function
 import argparse
-import nltk
 import logging
 
 
 def ngram_set(text, n):
+    import nltk
     tokens = nltk.wordpunct_tokenize(text)
     return set(nltk.ngrams(tokens, n))
 
