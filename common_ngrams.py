@@ -2,23 +2,35 @@
 from __future__ import print_function
 import argparse
 import logging
+import re
 
+def tokenize(text, lowercase=False):
+    # Based on wordpunkt tokenize in NLTK.
+    # https://github.com/nltk/nltk/blob/21b4d0af6f7e94ba49b3d912c9d64564082db440/nltk/tokenize/regexp.py#L183
+    pattern = r'\w+|[^\w\s]+'
+    regexp = re.compile(pattern)
+    tokens_raw = regexp.findall(text)
+    if lowercase:
+        tokens = [t.lower() for t in tokens_raw]
+    else:
+        tokens = tokens_raw
+    return tokens
 
-def ngram_set(text, n):
+def ngram_set(text, n, lowercase=False):
     import nltk
-    tokens = nltk.wordpunct_tokenize(text)
-    return set(nltk.ngrams(tokens, n))
+    tokens = tokenize(text, lowercase)
+    ngrams = set(nltk.ngrams(tokens, n))
+    return ngrams
 
-
-def ngrams_in_common(texts, n):
-    ngram_sets = [ngram_set(text, n) for text in texts]
+def ngrams_in_common(texts, n, lowercase=False):
+    ngram_sets = [ngram_set(text, n, lowercase) for text in texts]
     common_ngrams = set(set.intersection(*ngram_sets))
     return common_ngrams
 
 
-def ngrams_include_exclude(includes, excludes=[], n=1, nmax=10):
-    exclude_ngrams = [ngram_set(exclude, n) for exclude in excludes]
-    common_ngrams = ngrams_in_common(includes, n)
+def ngrams_include_exclude(includes, excludes=[], n=1, nmax=10, lowercase=False):
+    exclude_ngrams = [ngram_set(exclude, n, lowercase) for exclude in excludes]
+    common_ngrams = ngrams_in_common(includes, n, lowercase)
     for exclude_ngram_set in exclude_ngrams:
         common_ngrams = common_ngrams - exclude_ngram_set
 
@@ -26,7 +38,7 @@ def ngrams_include_exclude(includes, excludes=[], n=1, nmax=10):
     if len(common_ngrams) > 1 and n < nmax:
         return set.union(
             common_ngrams,
-            ngrams_include_exclude(includes, excludes, n=n+1))
+            ngrams_include_exclude(includes, excludes, n=n+1, nmax=nmax, lowercase=lowercase))
     else:
         return common_ngrams
 
@@ -79,6 +91,12 @@ if __name__ == '__main__':
         default=logging.WARNING
     )
     parser.add_argument(
+        '-l',
+        '--lowercase',
+        action='store_true',
+        help='Use all lowercase (case-insensitive matching)',
+    )
+    parser.add_argument(
         '-s',
         '--sort',
         choices=['alpha', 'length'],
@@ -90,7 +108,7 @@ if __name__ == '__main__':
     include_texts = get_texts(args.include)
     exclude_texts = get_texts(args.exclude)
 
-    ngrams = ngrams_include_exclude(include_texts, exclude_texts)
+    ngrams = ngrams_include_exclude(include_texts, exclude_texts, lowercase=args.lowercase)
 
     if args.sort == 'alpha':
         print_tuples_alphanumerically(ngrams)
