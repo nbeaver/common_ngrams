@@ -1,1 +1,2 @@
 - [ ] Case-insensitive by default.
+- [ ] Test behavior with quotation marks and other punctuation
