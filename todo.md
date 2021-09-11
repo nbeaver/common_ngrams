@@ -1,2 +1,3 @@
 - [ ] Case-insensitive by default.
 - [ ] Test behavior with quotation marks and other punctuation
+- [ ] Make a simple two-pane GUI.
