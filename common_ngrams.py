@@ -3,6 +3,7 @@ from __future__ import print_function
 import argparse
 import logging
 import re
+import os.path
 
 def tokenize(text, lowercase=False):
     # Based on wordpunkt tokenize in NLTK.
@@ -51,6 +52,18 @@ def print_tuples_longest_first(iterable):
         print(' '.join(item))
 
 
+def get_fps(path_list):
+    # TODO: re-work this
+    fp_list = []
+    if path_list is None:
+        return fp_list
+
+    for path in path_list:
+        fp = open(path, encoding='utf-8')
+        fp_list.append(fp)
+
+    return fp_list
+
 def get_texts(fp_list):
     texts = []
     if fp_list is None:
@@ -65,20 +78,27 @@ def get_texts(fp_list):
         texts.append(text)
     return texts
 
+def existing_file(path):
+    if not os.path.exists(path):
+        raise FileNotFoundError('path does not exist: {}'.format(path))
+    elif not os.path.isfile(path):
+        raise FileNotFoundError('not a file: {}'.format(path))
+    return path
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Find n-grams in common for text files.')
 
     parser.add_argument(
         '-i', '--include',
-        type=argparse.FileType('r'),
+        type=existing_file,
         nargs='+',
         help='Include n-grams from these files.',
         required=True,
     )
     parser.add_argument(
         '-x', '--exclude',
-        type=argparse.FileType('r'),
+        type=existing_file,
         nargs='*',
         help='Exclude n-grams from these files.',
     )
@@ -105,8 +125,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel)
 
-    include_texts = get_texts(args.include)
-    exclude_texts = get_texts(args.exclude)
+    include_fps = get_fps(args.include)
+    exclude_fps = get_fps(args.exclude)
+    include_texts = get_texts(include_fps)
+    exclude_texts = get_texts(exclude_fps)
 
     ngrams = ngrams_include_exclude(include_texts, exclude_texts, lowercase=args.lowercase)
 
