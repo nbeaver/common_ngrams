@@ -85,7 +85,7 @@ def existing_file(path):
         raise FileNotFoundError('not a file: {}'.format(path))
     return path
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Find n-grams in common for text files.')
 
@@ -138,3 +138,6 @@ if __name__ == '__main__':
         print_tuples_longest_first(ngrams)
     else:
         raise NotImplementedError
+
+if __name__ == '__main__':
+    main()
